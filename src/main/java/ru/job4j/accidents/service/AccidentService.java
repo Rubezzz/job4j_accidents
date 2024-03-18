@@ -13,11 +13,11 @@ public class AccidentService {
 
     private AccidentMem repository;
 
-    public Accident get(int id) {
-        return repository.get(id);
+    public Accident findById(int id) {
+        return repository.findById(id);
     }
 
-    public List<Accident> getAll() {
-        return repository.getAll();
+    public List<Accident> findAll() {
+        return repository.findAll();
     }
 }

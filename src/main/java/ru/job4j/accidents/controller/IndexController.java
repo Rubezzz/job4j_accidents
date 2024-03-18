@@ -15,7 +15,7 @@ public class IndexController {
     @GetMapping({"/", "/index"})
     public String getIndex(Model model) {
         model.addAttribute("user", "Petr Arsentev");
-        model.addAttribute("accidents", accidentService.getAll());
+        model.addAttribute("accidents", accidentService.findAll());
         return "index";
     }
 }

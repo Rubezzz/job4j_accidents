@@ -20,11 +20,11 @@ public class AccidentMem {
         accidents.put(accident2.getId(), accident2);
     }
 
-    public Accident get(int id) {
+    public Accident findById(int id) {
         return accidents.get(id);
     }
 
-    public List<Accident> getAll() {
+    public List<Accident> findAll() {
         return new ArrayList<>(accidents.values());
     }
 }
