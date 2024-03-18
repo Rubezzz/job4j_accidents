@@ -12,12 +12,11 @@ import java.util.concurrent.ConcurrentHashMap;
 public class AccidentMem {
 
     private Map<Integer, Accident> accidents = new ConcurrentHashMap<>();
+    private int index;
 
     public AccidentMem() {
-        Accident accident1 = new Accident(0, "ДТП", "Дтп на ул.Ленина", "Ленина, 12");
-        Accident accident2 = new Accident(1, "Парковка", "Неправильная парковка", "Космонавтов, 143");
-        accidents.put(accident1.getId(), accident1);
-        accidents.put(accident2.getId(), accident2);
+        create(new Accident(0, "ДТП", "Дтп на ул.Ленина", "Ленина, 12"));
+        create(new Accident(0, "Парковка", "Неправильная парковка", "Космонавтов, 143"));
     }
 
     public Accident findById(int id) {
@@ -26,5 +25,10 @@ public class AccidentMem {
 
     public List<Accident> findAll() {
         return new ArrayList<>(accidents.values());
+    }
+
+    public void create(Accident accident) {
+        accident.setId(index++);
+        accidents.put(accident.getId(), accident);
     }
 }

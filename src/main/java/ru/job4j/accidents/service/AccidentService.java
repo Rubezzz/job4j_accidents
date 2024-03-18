@@ -20,4 +20,8 @@ public class AccidentService {
     public List<Accident> findAll() {
         return repository.findAll();
     }
+
+    public void create(Accident accident) {
+        repository.create(accident);
+    }
 }
