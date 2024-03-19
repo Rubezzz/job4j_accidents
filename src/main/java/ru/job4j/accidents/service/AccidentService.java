@@ -24,4 +24,8 @@ public class AccidentService {
     public void create(Accident accident) {
         repository.create(accident);
     }
+
+    public void save(Accident accident) {
+        repository.save(accident);
+    }
 }

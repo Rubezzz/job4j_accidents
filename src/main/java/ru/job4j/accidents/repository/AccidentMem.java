@@ -32,4 +32,8 @@ public class AccidentMem {
         accident.setId(index.getAndIncrement());
         accidents.put(accident.getId(), accident);
     }
+
+    public void save(Accident accident) {
+        accidents.put(accident.getId(), accident);
+    }
 }
