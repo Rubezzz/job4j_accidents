@@ -16,14 +16,12 @@ public class AccidentMem {
 
     private Map<Integer, Accident> accidents = new ConcurrentHashMap<>();
     private AtomicInteger index = new AtomicInteger(0);
-    private List<AccidentType> types = new ArrayList<>();
+    private List<AccidentType> types;
 
-    public AccidentMem() {
-        types.add(new AccidentType(1, "Две машины"));
-        types.add(new AccidentType(2, "Машина и человек"));
-        types.add(new AccidentType(3, "Машина и велосипед"));
-        create(new Accident(0, "ДТП", "Дтп на ул.Ленина", "Ленина, 12", types.get(1)));
-        create(new Accident(0, "Парковка", "Неправильная парковка", "Космонавтов, 143", types.get(1)));
+    public AccidentMem(AccidentTypeMem accidentTypeMem) {
+        types = accidentTypeMem.findAll();
+        create(new Accident(0, "ДТП", "Дтп на ул.Ленина", "Ленина, 12", types.get(0)));
+        create(new Accident(0, "Парковка", "Неправильная парковка", "Космонавтов, 143", types.get(0)));
     }
 
     public Optional<Accident> findById(int id) {

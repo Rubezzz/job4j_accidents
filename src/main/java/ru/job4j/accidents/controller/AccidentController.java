@@ -10,8 +10,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import ru.job4j.accidents.model.Accident;
 import ru.job4j.accidents.model.AccidentType;
 import ru.job4j.accidents.service.AccidentService;
+import ru.job4j.accidents.service.AccidentTypeService;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -19,27 +19,29 @@ import java.util.Optional;
 @AllArgsConstructor
 public class AccidentController {
 
-    private final AccidentService accidents;
+    private final AccidentService accidentService;
+    private final AccidentTypeService accidentTypeService;
 
     @GetMapping("/createAccident")
     public String viewCreateAccident(Model model) {
-        List<AccidentType> types = new ArrayList<>();
-        types.add(new AccidentType(1, "Две машины"));
-        types.add(new AccidentType(2, "Машина и человек"));
-        types.add(new AccidentType(3, "Машина и велосипед"));
+        List<AccidentType> types = accidentTypeService.findAll();
+        if (types.size() == 0) {
+            model.addAttribute("message", "Типы инцидентов не найдены!");
+            return "errors/404";
+        }
         model.addAttribute("types", types);
         return "accident/createAccident";
     }
 
     @PostMapping("/saveAccident")
     public String save(@ModelAttribute Accident accident) {
-        accidents.create(accident);
+        accidentService.create(accident);
         return "redirect:/index";
     }
 
     @GetMapping("/formUpdateAccident")
     public String update(@RequestParam("id") int id, Model model) {
-        Optional<Accident> accident = accidents.findById(id);
+        Optional<Accident> accident = accidentService.findById(id);
         if (accident.isEmpty()) {
             model.addAttribute("message", "Инцидент не найден!");
             return "errors/404";
@@ -50,7 +52,7 @@ public class AccidentController {
 
     @PostMapping("/updateAccident")
     public String update(@ModelAttribute Accident accident) {
-        accidents.save(accident);
+        accidentService.save(accident);
         return "redirect:/";
     }
 }
