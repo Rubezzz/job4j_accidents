@@ -7,6 +7,7 @@ import ru.job4j.accidents.model.AccidentType;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -25,8 +26,8 @@ public class AccidentMem {
         create(new Accident(0, "Парковка", "Неправильная парковка", "Космонавтов, 143", types.get(1)));
     }
 
-    public Accident findById(int id) {
-        return accidents.get(id);
+    public Optional<Accident> findById(int id) {
+        return Optional.ofNullable(accidents.get(id));
     }
 
     public List<Accident> findAll() {

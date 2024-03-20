@@ -13,6 +13,7 @@ import ru.job4j.accidents.service.AccidentService;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 @AllArgsConstructor
@@ -38,7 +39,12 @@ public class AccidentController {
 
     @GetMapping("/formUpdateAccident")
     public String update(@RequestParam("id") int id, Model model) {
-        model.addAttribute("accident", accidents.findById(id));
+        Optional<Accident> accident = accidents.findById(id);
+        if (accident.isEmpty()) {
+            model.addAttribute("message", "Инцидент не найден!");
+            return "errors/404";
+        }
+        model.addAttribute("accident", accident.get());
         return "accident/updateAccident";
     }
 
