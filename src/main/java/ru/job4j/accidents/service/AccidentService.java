@@ -8,6 +8,7 @@ import ru.job4j.accidents.repository.AccidentTypeMem;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 public class AccidentService {
@@ -25,12 +26,14 @@ public class AccidentService {
         create(new Accident(0, "ДТП",
                 "Дтп на ул.Ленина",
                 "Ленина, 12",
-                accidentTypeRepository.findById(0).get()));
+                accidentTypeRepository.findById(0).get(),
+                Set.of()));
         create(new Accident(0,
                 "Парковка",
                 "Неправильная парковка",
                 "Космонавтов, 143",
-                accidentTypeRepository.findById(0).get()));
+                accidentTypeRepository.findById(0).get(),
+                Set.of()));
     }
 
     public Optional<Accident> findById(int id) {
