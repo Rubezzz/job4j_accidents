@@ -8,17 +8,13 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import ru.job4j.accidents.model.Accident;
-import ru.job4j.accidents.model.AccidentType;
-import ru.job4j.accidents.model.Rule;
 import ru.job4j.accidents.service.AccidentRuleService;
 import ru.job4j.accidents.service.AccidentService;
 import ru.job4j.accidents.service.AccidentTypeService;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.HashSet;
-import java.util.List;
+import java.util.Arrays;
 import java.util.Optional;
-import java.util.Set;
 
 @Controller
 @AllArgsConstructor
@@ -30,33 +26,20 @@ public class AccidentController {
 
     @GetMapping("/createAccident")
     public String viewCreateAccident(Model model) {
-        List<AccidentType> types = accidentTypeService.findAll();
-        if (types.size() == 0) {
-            model.addAttribute("message", "Типы инцидентов не найдены!");
-            return "errors/404";
-        }
-        Set<Rule> rules = accidentRuleService.findAll();
-        if (rules.size() == 0) {
-            model.addAttribute("message", "Статьи инцидентов не найдены!");
-            return "errors/404";
-        }
-        model.addAttribute("types", types);
-        model.addAttribute("rules", rules);
+        model.addAttribute("types", accidentTypeService.findAll());
+        model.addAttribute("rules", accidentRuleService.findAll());
         return "accident/createAccident";
     }
 
     @PostMapping("/saveAccident")
     public String save(@ModelAttribute Accident accident, HttpServletRequest req) {
-        String[] ids = req.getParameterValues("rIds");
-        Set<Rule> resultRules = new HashSet<>();
-        if (ids != null) {
-            for (String id : ids) {
-                Optional<Rule> optionalRule = accidentRuleService.findById(Integer.parseInt(id));
-                optionalRule.ifPresent(resultRules::add);
-            }
+        String[] idsString = req.getParameterValues("rIds");
+        if (idsString != null) {
+            int[] ids = Arrays.stream(req.getParameterValues("rIds")).mapToInt(Integer::parseInt).toArray();
+            accidentService.create(accident, ids);
+        } else {
+            accidentService.create(accident);
         }
-        accident.setRules(resultRules);
-        accidentService.create(accident);
         return "redirect:/index";
     }
 

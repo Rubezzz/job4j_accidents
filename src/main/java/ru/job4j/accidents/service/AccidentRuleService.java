@@ -18,6 +18,10 @@ public class AccidentRuleService {
         return repository.findById(id);
     }
 
+    public Set<Rule> findByMultipleIds(int[] ids) {
+        return repository.findByMultipleIds(ids);
+    }
+
     public Set<Rule> findAll() {
         return repository.findAll();
     }

@@ -23,6 +23,12 @@ public class AccidentRuleMem {
         return Optional.ofNullable(accidentRule.get(id));
     }
 
+    public Set<Rule> findByMultipleIds(int[] ids) {
+        Set<Rule> rsl = new HashSet<>();
+        Arrays.stream(ids).forEach(id -> rsl.add(accidentRule.get(id)));
+        return rsl;
+    }
+
     public Optional<Rule> findByName(int id) {
         return Optional.ofNullable(accidentRule.get(id));
     }
