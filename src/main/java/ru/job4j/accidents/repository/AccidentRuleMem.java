@@ -6,6 +6,8 @@ import ru.job4j.accidents.model.Rule;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 @Repository
 public class AccidentRuleMem {
@@ -24,9 +26,10 @@ public class AccidentRuleMem {
     }
 
     public Set<Rule> findByMultipleIds(int[] ids) {
-        Set<Rule> rsl = new HashSet<>();
-        Arrays.stream(ids).forEach(id -> rsl.add(accidentRule.get(id)));
-        return rsl;
+        return accidentRule.values()
+                .stream()
+                .filter(rule -> IntStream.of(ids).anyMatch(id -> id == rule.getId()))
+                .collect(Collectors.toSet());
     }
 
     public Optional<Rule> findByName(int id) {

@@ -13,7 +13,6 @@ import ru.job4j.accidents.service.AccidentService;
 import ru.job4j.accidents.service.AccidentTypeService;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.Arrays;
 import java.util.Optional;
 
 @Controller
@@ -33,13 +32,8 @@ public class AccidentController {
 
     @PostMapping("/saveAccident")
     public String save(@ModelAttribute Accident accident, HttpServletRequest req) {
-        String[] idsString = req.getParameterValues("rIds");
-        if (idsString != null) {
-            int[] ids = Arrays.stream(req.getParameterValues("rIds")).mapToInt(Integer::parseInt).toArray();
-            accidentService.create(accident, ids);
-        } else {
-            accidentService.create(accident);
-        }
+        String[] ids = req.getParameterValues("rIds");
+        accidentService.create(accident, ids);
         return "redirect:/index";
     }
 

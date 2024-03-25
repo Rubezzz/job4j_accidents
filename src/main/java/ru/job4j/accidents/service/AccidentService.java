@@ -7,6 +7,7 @@ import ru.job4j.accidents.repository.AccidentMem;
 import ru.job4j.accidents.repository.AccidentRuleMem;
 import ru.job4j.accidents.repository.AccidentTypeMem;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -53,8 +54,11 @@ public class AccidentService {
         accidentRepository.create(accident);
     }
 
-    public void create(Accident accident, int[] ruleIds) {
-        accident.setRules(accidentRuleRepository.findByMultipleIds(ruleIds));
+    public void create(Accident accident, String[] ruleIds) {
+        if (ruleIds != null) {
+            int[] ids = Arrays.stream(ruleIds).mapToInt(Integer::parseInt).toArray();
+            accident.setRules(accidentRuleRepository.findByMultipleIds(ids));
+        }
         create(accident);
     }
 
