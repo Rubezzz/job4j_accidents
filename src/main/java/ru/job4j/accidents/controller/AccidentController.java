@@ -45,12 +45,15 @@ public class AccidentController {
             return "errors/404";
         }
         model.addAttribute("accident", accident.get());
+        model.addAttribute("types", accidentTypeService.findAll());
+        model.addAttribute("rules", accidentRuleService.findAll());
         return "accident/updateAccident";
     }
 
     @PostMapping("/updateAccident")
-    public String update(@ModelAttribute Accident accident) {
-        accidentService.save(accident);
+    public String update(@ModelAttribute Accident accident, HttpServletRequest req) {
+        String[] ids = req.getParameterValues("rIds");
+        accidentService.save(accident, ids);
         return "redirect:/";
     }
 }

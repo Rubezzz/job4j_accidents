@@ -1,44 +1,22 @@
 package ru.job4j.accidents.service;
 
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.job4j.accidents.model.Accident;
 import ru.job4j.accidents.model.AccidentType;
-import ru.job4j.accidents.repository.AccidentMem;
-import ru.job4j.accidents.repository.AccidentRuleMem;
-import ru.job4j.accidents.repository.AccidentTypeMem;
+import ru.job4j.accidents.repository.*;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 @Service
+@AllArgsConstructor
 public class AccidentService {
 
-    private AccidentMem accidentRepository;
-    private AccidentTypeMem accidentTypeRepository;
-    private AccidentRuleMem accidentRuleRepository;
-
-    public AccidentService(AccidentMem accidentMem, AccidentTypeMem accidentTypeMem, AccidentRuleMem accidentRuleMem) {
-        this.accidentRepository = accidentMem;
-        this.accidentTypeRepository = accidentTypeMem;
-        this.accidentRuleRepository = accidentRuleMem;
-        initAccidents();
-    }
-
-    private void initAccidents() {
-        create(new Accident(0, "ДТП",
-                "Дтп на ул.Ленина",
-                "Ленина, 12",
-                accidentTypeRepository.findById(0).get(),
-                Set.of()));
-        create(new Accident(0,
-                "Парковка",
-                "Неправильная парковка",
-                "Космонавтов, 143",
-                accidentTypeRepository.findById(0).get(),
-                Set.of()));
-    }
+    private AccidentJdbcTemplate accidentRepository;
+    private AccidentTypeJdbcTemplate accidentTypeRepository;
+    private AccidentRuleJdbcTemplate accidentRuleRepository;
 
     public Optional<Accident> findById(int id) {
         return accidentRepository.findById(id);
@@ -54,15 +32,24 @@ public class AccidentService {
         accidentRepository.create(accident);
     }
 
-    public void create(Accident accident, String[] ruleIds) {
+    private void setRulesToAccident(Accident accident, String[] ruleIds) {
         if (ruleIds != null) {
             int[] ids = Arrays.stream(ruleIds).mapToInt(Integer::parseInt).toArray();
             accident.setRules(accidentRuleRepository.findByMultipleIds(ids));
         }
+    }
+
+    public void create(Accident accident, String[] ruleIds) {
+        setRulesToAccident(accident, ruleIds);
         create(accident);
     }
 
     public void save(Accident accident) {
         accidentRepository.save(accident);
+    }
+
+    public void save(Accident accident, String[] ruleIds) {
+        setRulesToAccident(accident, ruleIds);
+        save(accident);
     }
 }

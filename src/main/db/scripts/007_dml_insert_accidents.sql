@@ -1,0 +1,2 @@
+INSERT INTO accident(name, text, address, type_id) VALUES ('Дтп', 'Дтп на обочине', 'Ленина, 110', 1);
+INSERT INTO accident(name, text, address, type_id) VALUES ('Дтп с велосипедом', 'Дтп на пешеходном с велосипедом', 'Космонавтов, 5', 3);
