@@ -14,9 +14,9 @@ import java.util.Optional;
 @AllArgsConstructor
 public class AccidentService {
 
-    private AccidentJdbcTemplate accidentRepository;
-    private AccidentTypeJdbcTemplate accidentTypeRepository;
-    private AccidentRuleJdbcTemplate accidentRuleRepository;
+    private AccidentHibernate accidentRepository;
+    private AccidentTypeHibernate accidentTypeRepository;
+    private AccidentRuleHibernate accidentRuleRepository;
 
     public Optional<Accident> findById(int id) {
         return accidentRepository.findById(id);

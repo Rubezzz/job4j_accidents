@@ -3,7 +3,7 @@ package ru.job4j.accidents.service;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.job4j.accidents.model.Rule;
-import ru.job4j.accidents.repository.AccidentRuleJdbcTemplate;
+import ru.job4j.accidents.repository.AccidentRuleHibernate;
 
 import java.util.Optional;
 import java.util.Set;
@@ -12,7 +12,7 @@ import java.util.Set;
 @AllArgsConstructor
 public class AccidentRuleService {
 
-    private AccidentRuleJdbcTemplate repository;
+    private AccidentRuleHibernate repository;
 
     public Optional<Rule> findById(int id) {
         return repository.findById(id);
