@@ -1,8 +1,6 @@
 package ru.job4j.accidents.repository;
 
 import lombok.AllArgsConstructor;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
 import org.springframework.stereotype.Repository;
 import ru.job4j.accidents.model.Rule;
 
@@ -12,42 +10,30 @@ import java.util.*;
 @AllArgsConstructor
 public class AccidentRuleHibernate {
 
-    private final SessionFactory sf;
+    private final CrudRepository crudRepository;
 
     public Optional<Rule> findById(int id) {
-        try (Session session = sf.openSession()) {
-            return session
-                    .createQuery("FROM Rule WHERE id = :fId", Rule.class)
-                    .setParameter("fId", id)
-                    .uniqueResultOptional();
-        }
+        return crudRepository.optional(
+                "FROM Rule WHERE id = :fId",
+                Rule.class,
+                Map.of("fId", id)
+        );
     }
 
     public Set<Rule> findByMultipleIds(int[] ids) {
         List<Integer> listIds = Arrays.stream(ids).boxed().toList();
-        try (Session session = sf.openSession()) {
-            List<Rule> listRule = session
-                    .createQuery("FROM Rule WHERE id IN (:ruleIds)", Rule.class)
-                    .setParameterList("ruleIds", listIds)
-                    .list();
-            return new HashSet<>(listRule);
-        }
+        List<Rule> listRule = crudRepository.query(
+                "FROM Rule WHERE id IN (:ruleIds)",
+                Rule.class,
+                Map.of("ruleIds", listIds));
+        return new HashSet<>(listRule);
     }
 
     public Set<Rule> findAll() {
-        try (Session session = sf.openSession()) {
-            List<Rule> listRule = session
-                    .createQuery("FROM Rule", Rule.class)
-                    .list();
-            return new HashSet<>(listRule);
-        }
+        return new HashSet<>(crudRepository.query("FROM Rule", Rule.class, Map.of()));
     }
 
     public void create(Rule rule) {
-        try (Session session = sf.openSession()) {
-            session.beginTransaction();
-            session.save(rule);
-            session.getTransaction().commit();
-        }
+        crudRepository.run(session -> session.save(rule));
     }
 }
