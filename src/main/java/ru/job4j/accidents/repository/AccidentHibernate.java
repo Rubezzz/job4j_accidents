@@ -35,7 +35,7 @@ public class AccidentHibernate {
     public List<Accident> findAll() {
         try (Session session = sf.openSession()) {
             return session
-                    .createQuery("FROM Accident", Accident.class)
+                    .createQuery("SELECT DISTINCT a FROM Accident a LEFT JOIN FETCH a.rules", Accident.class)
                     .list();
         }
     }
