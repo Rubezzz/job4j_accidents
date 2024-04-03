@@ -17,19 +17,12 @@ public class AccidentRuleService {
         return repository.findById(id);
     }
 
-    private Set<Rule> iterableToSet(Iterable<Rule> rules) {
-        Set<Rule> rulesSet = new HashSet<>();
-        rules.forEach(rulesSet::add);
-        return rulesSet;
-    }
-
     public Set<Rule> findByMultipleIds(int[] ids) {
-        List<Integer> listIds = Arrays.stream(ids).boxed().toList();
-        return iterableToSet(repository.findAllById(listIds));
+        return repository.findByIdIn(ids);
     }
 
     public Set<Rule> findAll() {
-        return iterableToSet(repository.findAll());
+        return repository.findAll();
     }
 
     public void create(Rule rule) {

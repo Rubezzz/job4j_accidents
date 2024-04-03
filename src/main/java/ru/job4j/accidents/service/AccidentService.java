@@ -4,10 +4,13 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.job4j.accidents.model.Accident;
 import ru.job4j.accidents.model.AccidentType;
-import ru.job4j.accidents.model.Rule;
-import ru.job4j.accidents.repository.*;
+import ru.job4j.accidents.repository.AccidentRepository;
+import ru.job4j.accidents.repository.AccidentRuleRepository;
+import ru.job4j.accidents.repository.AccidentTypeRepository;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 @AllArgsConstructor
@@ -22,7 +25,7 @@ public class AccidentService {
     }
 
     public List<Accident> findAll() {
-        return (List<Accident>) accidentRepository.findAll();
+        return accidentRepository.findAll();
     }
 
     public void create(Accident accident) {
@@ -33,10 +36,8 @@ public class AccidentService {
 
     private void setRulesToAccident(Accident accident, String[] ruleIds) {
         if (ruleIds != null) {
-            List<Integer> ids = Arrays.stream(ruleIds).map(Integer::parseInt).toList();
-            Set<Rule> rulesSet = new HashSet<>();
-            accidentRuleRepository.findAllById(ids).forEach(rulesSet::add);
-            accident.setRules(rulesSet);
+            int[] ids = Arrays.stream(ruleIds).mapToInt(Integer::parseInt).toArray();
+            accident.setRules(accidentRuleRepository.findByIdIn(ids));
         }
     }
 
