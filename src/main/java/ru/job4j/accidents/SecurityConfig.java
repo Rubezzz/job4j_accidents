@@ -1,6 +1,7 @@
 package ru.job4j.accidents;
 
 import lombok.AllArgsConstructor;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -21,12 +22,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         auth.jdbcAuthentication()
                 .dataSource(ds)
                 .withUser(User.withUsername("user")
-                        .password(passwordEncoder.encode("123456"))
+                        .password(encoder().encode("123456"))
                         .roles("USER"));
+    }
+
+    @Bean
+    PasswordEncoder encoder() {
+        return new BCryptPasswordEncoder();
     }
 
     @Override
