@@ -29,10 +29,9 @@ public class RegController {
         Optional<User> savedUser = users.save(user);
         if (savedUser.isPresent()) {
             return "redirect:/login";
-        } else {
-            model.addAttribute("error", "Пользователь с таким именем уже существует!");
-            return "reg";
         }
+        model.addAttribute("error", "Пользователь с таким именем уже существует!");
+        return "reg";
     }
 
     @GetMapping("/reg")
